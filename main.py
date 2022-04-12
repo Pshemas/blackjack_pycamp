@@ -10,8 +10,8 @@ def main():
     # Player Turn
     print(f"Karty gracza {player1.name}:")
     player1.showcards()
-    player1.hand.calculate_total()
-    print(f"Wynik: {player1.hand.total}")
+    game.calculate_handvalue(player1)
+    print(f"Wynik: {player1.handvalue}")
     if game.check_initial_wincondition():
         print("Oczko! Następne rozdanie.")
     else:
@@ -19,10 +19,10 @@ def main():
             picknewcard = input("Dobierasz t/n ? ")
             if picknewcard == "n":
                 break
-            player1.hand.cards.append(game.deck.currentdeck.pop())
+            player1.hand.append(game.deck.currentdeck.pop())
             player1.showcards()
-            player1.hand.calculate_total()
-            print(f"Wynik: {player1.hand.total}")
+            game.calculate_handvalue(player1)
+            print(f"Wynik: {player1.handvalue}")
             if game.isover21():
                 break
 
@@ -30,9 +30,9 @@ def main():
             game.dealer.score += 1
             print("masz ponad 21. Krupier wygrywa.")
         else:
-            game.dealer.dealerplay(player1.hand.total, game)
+            game.dealerplay(player1.handvalue, game)
 
-        if game.dealer.hand.total <= 21:
+        if game.dealer.handvalue <= 21:
             game.dealer.score += 1
             print("Krupier wygrał!")
         else:
