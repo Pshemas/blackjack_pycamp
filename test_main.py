@@ -21,7 +21,6 @@ def test_deckcreation():
 
 def test_decklength():
     testdeck = Deck()
-    testdeck.add_all_cards_shuffled()
     assert len(testdeck.currentdeck) == 52
 
 
