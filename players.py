@@ -10,3 +10,6 @@ class Player:
     def showcards(self):
         for card in self.hand:
             print(card)
+
+    def __repr__(self) -> str:
+        return f"Gracz: {self.name}. \n Karty: \n {self.hand} \n Wartość: {self.handvalue} \n"

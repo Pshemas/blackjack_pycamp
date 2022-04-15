@@ -7,13 +7,13 @@ class Deck:
     """stores a shuffled deck of cards"""
 
     def __init__(self) -> None:
-        self.currentdeck = []
-        self.add_all_cards_shuffled()
+        self.cards = []
+        self.prepare_new_deck()
 
-    def add_all_cards_shuffled(self):
-        self.currentdeck += [
+    def prepare_new_deck(self):
+        self.cards = [
             Card(suit, rank)
             for rank in SuitsRanks().generate_ranks()
             for suit in SuitsRanks().generate_suits()
         ]
-        shuffle(self.currentdeck)
+        shuffle(self.cards)

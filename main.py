@@ -2,46 +2,53 @@ from players import Player
 from blackjack_game import BlackjackGame
 
 
-def main():
+def Blackjack_singleplayer_gameloop():
+    """a simpliefied blackjack game loop for a single player"""
     player1 = Player(input("Imie gracza: "))
     game = BlackjackGame()
     game.players.append(player1)
-    game.initialdraw()
-    # Player Turn
-    print(f"Karty gracza {player1.name}:")
-    player1.showcards()
-    game.calculate_handvalue(player1)
-    print(f"Wynik: {player1.handvalue}")
-    if game.check_initial_wincondition():
-        print("Oczko! Następne rozdanie.")
-    else:
-        while True:
-            picknewcard = input("Dobierasz t/n ? ")
-            if picknewcard == "n":
-                break
-            player1.hand.append(game.deck.currentdeck.pop())
-            player1.showcards()
-            game.calculate_handvalue(player1)
-            print(f"Wynik: {player1.handvalue}")
-            if game.isover21():
-                break
+    game.assign_card_values()
 
-        if game.isover21():
+    while True:
+        game.initialdraw()
+        game.players_turn()
+        if player1.handvalue > 21:
+            print("Krupier wygrał! Masz więcej niż 21.")
+            print(player1)
             game.dealer.score += 1
-            print("masz ponad 21. Krupier wygrywa.")
         else:
-            game.dealerplay(player1.handvalue, game)
+            game.dealer_turn(player1.handvalue)
+            if game.dealer.handvalue > 21:
+                print("Wygrałeś! Krupier ma ponad 21.")
+                player1.score += 1
+            else:
+                if player1.handvalue > game.dealer.handvalue:
+                    print("Wygrałeś! Masz więcej niż krupier.")
+                    player1.score += 1
+                elif player1.handvalue == game.dealer.handvalue:
+                    print("Remis!")
+                else:
+                    print("Krupier wygrał!")
+                    game.dealer.score += 1
 
-        if game.dealer.handvalue <= 21:
-            game.dealer.score += 1
-            print("Krupier wygrał!")
+        playagain = input("Kolejne rozdanie t/n? ")
+        while playagain not in {"t", "n"}:
+            print("Zła wartość!")
+            playagain = input("Kolejne rozdanie t/n? ")
+
+        if playagain == "n":
+            print("Koniec gry!")
+            print("Wyniki:")
+            for player in game.players:
+                print(f"{player.name}: {player.score}")
+            print(f"Krupier: {game.dealer.score}")
+            break
+
         else:
-            player1.score += 1
-            print("Wygrałeś!")
-
-        print(f"Dealer miał:")
-        game.dealer.showcards()
+            game.deck.prepare_new_deck()
+            game.assign_card_values()
+            game.clear_hands()
 
 
 if __name__ == "__main__":
-    main()
+    Blackjack_singleplayer_gameloop()
