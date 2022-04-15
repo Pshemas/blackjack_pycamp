@@ -11,5 +11,8 @@ class Player:
         for card in self.hand:
             print(card)
 
+    def clear_hand(self):
+        self.hand = []
+
     def __repr__(self) -> str:
         return f"Gracz: {self.name}. \n Karty: \n {self.hand} \n Wartość: {self.handvalue} \n"

@@ -49,8 +49,8 @@ class BlackjackGame:
     def clear_hands(self):
         """empties players and dealer's hand"""
         for player in self.players:
-            player.hand = []
-        self.dealer.hand = []
+            player.clear_hand()
+        self.dealer.clear_hand()
 
     def players_turn(self):
         """player turn loop"""
