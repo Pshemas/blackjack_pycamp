@@ -1,3 +1,4 @@
+from exceptions import DealerLostException, Over21Exception, PlayerLostException
 from players import Player
 from deck import Deck
 from constants import BlackjackCardScoring
@@ -26,6 +27,9 @@ class BlackjackGame:
                     counter += 1
         player.handvalue = total
 
+        if player.handvalue > 21:
+            raise Over21Exception
+
     @staticmethod
     def is_not_over21(player: Player) -> bool:
         """check whether player's handvalue has not exceeded 21"""
@@ -43,8 +47,10 @@ class BlackjackGame:
         for player in self.players:
             for _ in range(2):
                 player.hand.append(self.deck.cards.pop())
+            self.calculate_handvalue(player)
         for _ in range(2):
             self.dealer.hand.append(self.deck.cards.pop())
+        self.calculate_handvalue(self.dealer)
 
     def clear_hands(self):
         """empties players and dealer's hand"""
@@ -52,12 +58,12 @@ class BlackjackGame:
             player.clear_hand()
         self.dealer.clear_hand()
 
-    def players_turn(self):
+    def players_turn(self, player):
         """player turn loop"""
-        for player in self.players:
-            self.calculate_handvalue(player)
-            print(player)
-            while self.is_not_over21(player):
+        print(player)
+
+        try:
+            while True:
                 picknewcard = input("Dobierasz t/n? ")
                 if picknewcard == "n":
                     break
@@ -68,10 +74,38 @@ class BlackjackGame:
                 else:
                     print("Wprowadzono nieprawidłową wartość.")
 
+            if player.handvalue <= self.dealer.handvalue:
+                raise PlayerLostException
+
+        except Over21Exception:
+            raise PlayerLostException
+
     def dealer_turn(self, top_player_handvalue: int):
         """dealer turn loop"""
-        self.calculate_handvalue(self.dealer)
-        while self.dealer.handvalue < top_player_handvalue:
-            self.dealer.hand.append(self.deck.cards.pop())
-            self.calculate_handvalue(self.dealer)
-        print(self.dealer)
+        try:
+            while self.dealer.handvalue < top_player_handvalue:
+                self.dealer.hand.append(self.deck.cards.pop())
+                self.calculate_handvalue(self.dealer)
+            raise PlayerLostException
+
+        except Over21Exception:
+            raise DealerLostException
+
+    def blackjack_singleplayer_gameloop(self):
+        self.initialdraw()
+        try:
+            for player in self.players:
+                self.players_turn(player)
+                highest_handvalue = self.players[0].handvalue
+                print(f"Najw wynik: {highest_handvalue}")
+                self.dealer_turn(highest_handvalue)
+
+        except PlayerLostException:
+            self.dealer.score += 1
+            print(self.dealer)
+            print("Krupier wygrał!")
+
+        except DealerLostException:
+            self.players[0].score += 1
+            print(self.dealer)
+            print("Gratualcje! Wygrałeś!")
