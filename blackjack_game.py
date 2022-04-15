@@ -71,6 +71,7 @@ class BlackjackGame:
                     player.hand.append(self.deck.cards.pop())
                     self.calculate_handvalue(player)
                     print(player)
+
                 else:
                     print("Wprowadzono nieprawidłową wartość.")
 
@@ -79,6 +80,9 @@ class BlackjackGame:
 
         except Over21Exception:
             raise PlayerLostException
+
+        finally:
+            print(player)
 
     def dealer_turn(self, top_player_handvalue: int):
         """dealer turn loop"""
@@ -98,7 +102,6 @@ class BlackjackGame:
             for player in self.players:
                 self.players_turn(player)
                 highest_handvalue = self.players[0].handvalue
-                print(f"Najw wynik: {highest_handvalue}")
                 self.dealer_turn(highest_handvalue)
 
         except PlayerLostException:
