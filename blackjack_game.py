@@ -92,6 +92,7 @@ class BlackjackGame:
             raise DealerLostException
 
     def blackjack_singleplayer_gameloop(self):
+        """game loop for a single player"""
         self.initialdraw()
         try:
             for player in self.players:

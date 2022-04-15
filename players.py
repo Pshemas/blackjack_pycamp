@@ -8,10 +8,12 @@ class Player:
         self.score = 0
 
     def showcards(self):
+        """prints cards in players hand"""
         for card in self.hand:
             print(card)
 
     def clear_hand(self):
+        """empties players hand"""
         self.hand = []
 
     def __repr__(self) -> str:

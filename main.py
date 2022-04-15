@@ -26,6 +26,7 @@ def Blackjack_singleplayer_gameloop():
             break
 
         else:
+            # currently new deck is used during each play
             game.deck.prepare_new_deck()
             game.assign_card_values()
             game.clear_hands()
