@@ -1,3 +1,7 @@
+# @TODO: move calculate_handvalue and is_not_over21 to Player class.
+# Also make it more general (turn the latter into is_not_over, with additional
+# parameter which will determine the ceiling).
+
 from exceptions import DealerLostException, Over21Exception, PlayerLostException
 from players import Player
 from deck import Deck
