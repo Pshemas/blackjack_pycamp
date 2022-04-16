@@ -6,9 +6,10 @@ class SuitsRanks:
     """Container class to generate signs and ranks used in most popular card deck type"""
 
     suits: tuple = field(
-        default_factory=lambda: ("Clubs", "Diamonds", "Hearts", "Spades")
+        init=False, default_factory=lambda: ("Clubs", "Diamonds", "Hearts", "Spades")
     )
     ranks: tuple = field(
+        init=False,
         default_factory=lambda: (
             "Ace",
             "2",
@@ -23,7 +24,7 @@ class SuitsRanks:
             "Jack",
             "Queen",
             "King",
-        )
+        ),
     )
 
     def generate_suits(self):
